@@ -7,9 +7,11 @@
         <strong>Please choose the CSV file to dump:</strong><br />
         <input type="file" id="file" />
         <input type="button" value="Load file" onclick="dump();" />
+        <img id="spinner" src="../../../_utils/image/spinner.gif" style="display: none;" />
         <script type="text/javascript">
             var dump = function() {
                 console.log('Dump started.');
+                toggleSpinner();
                 var file = document.getElementById('file').files[0];
                 if (file) {
                     var reader = new FileReader();
@@ -23,9 +25,18 @@
                         var worker = new Worker('crumbs-worker.js');
                         worker.onmessage = function(message) {
                             console.log(message.data);
+                            toggleSpinner();
                         };
                         worker.postMessage(payload);
                     };
+                }
+            };
+            var toggleSpinner = function() {
+                var spinner = document.getElementById('spinner');
+                if (spinner.getAttribute('style').indexOf('none') == -1) {
+                    spinner.setAttribute('style', 'display: none');
+                } else {
+                    spinner.setAttribute('style', 'display: show');
                 }
             };
         </script>
