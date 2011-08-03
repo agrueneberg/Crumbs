@@ -18,10 +18,7 @@
                     reader.readAsText(file);
                     reader.onload = function(event) {
                         console.log('File loaded.');
-                        var payload = {
-                            url: window.location.protocol + '//' + window.location.host + '/' + window.location.pathname.split('/')[1] + '/',
-                            data: event.target.result
-                        };
+                        var payload = event.target.result;
                         var worker = new Worker('crumbs-worker.js');
                         worker.onmessage = function(message) {
                             console.log(message.data);
