@@ -1,14 +1,20 @@
 onmessage = function(message) {
     var docs = [];
-    var rows = message.data.split('\n').filter(function(field) {
+    var fields = [];
+    var rows = message.data.data.split('\n').filter(function(field) {
         // Skip empty rows
         if (field.length > 0) {
             return field;
         }
-    }).forEach(function(row) {
+    });
+    if (message.data.options && message.data.options.first_line_has_field_names){
+      fields = rows.shift().split(',');
+    }
+    rows.forEach(function(row) {
         var doc = {};
         row.split(',').forEach(function(field, index) {
-            doc['field' + index] = field;
+            var field_name = fields[index] || 'field' + index;
+            doc[field_name] = field;
         });
         docs.push(doc);
     });

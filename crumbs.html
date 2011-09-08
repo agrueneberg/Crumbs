@@ -18,7 +18,12 @@
                     reader.readAsText(file);
                     reader.onload = function(event) {
                         console.log('File loaded.');
-                        var payload = event.target.result;
+                        var payload = {
+                          data: event.target.result,
+                          options: {
+                            first_line_has_field_names : true
+                          }
+                        };
                         var worker = new Worker('crumbs-worker.js');
                         worker.onmessage = function(message) {
                             console.log(message.data);
