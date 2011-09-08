@@ -39,6 +39,7 @@
                   spinner.src = location.origin + "/_utils/image/spinner.gif";
                   spinner.id = "spinner";
                   spinner.setAttribute('style', 'display: show');
+                  return document.body.appendChild(spinner);
                 }
                 if (spinner.getAttribute('style').indexOf('none') == -1) {
                     spinner.setAttribute('style', 'display: none');
