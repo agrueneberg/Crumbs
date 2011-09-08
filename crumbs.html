@@ -20,7 +20,6 @@
         </div>
         <div>
             <input type="button" value="Load file" onclick="dump();" />
-            <img id="spinner" src="../../../_utils/image/spinner.gif" style="display: none;" />
         </div>
         <script type="text/javascript">
             var dump = function() {
@@ -50,10 +49,18 @@
             };
             var toggleSpinner = function() {
                 var spinner = document.getElementById('spinner');
-                if (spinner.getAttribute('style').indexOf('none') == -1) {
-                    spinner.setAttribute('style', 'display: none');
-                } else {
+                if (!spinner) {
+                    spinner = document.createElement('img');
+                    spinner.src = location.origin + '/_utils/image/spinner.gif';
+                    spinner.id = 'spinner';
                     spinner.setAttribute('style', 'display: show');
+                    document.body.getElementsByTagName('div')[2].appendChild(spinner);
+                } else {
+                    if (spinner.getAttribute('style').indexOf('none') == -1) {
+                        spinner.setAttribute('style', 'display: none');
+                    } else {
+                        spinner.setAttribute('style', 'display: show');
+                    }
                 }
             };
         </script>
