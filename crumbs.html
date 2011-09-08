@@ -45,6 +45,10 @@
                         };
                         worker.postMessage(payload);
                     };
+                } else {
+                    toggleSpinner();
+                    alert('Please provide a CSV file.');
+                    console.log('Dump aborted.');
                 }
             };
             var toggleSpinner = function() {
