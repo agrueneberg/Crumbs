@@ -2,12 +2,26 @@
 <html>
     <head>
         <title>Crumbs</title>
+        <style>
+            div {
+                margin-bottom: 10px;
+            }
+        </style>
     </head>
     <body>
-        <strong>Please choose the CSV file to dump:</strong><br />
-        <input type="file" id="file" />
-        <input type="button" value="Load file" onclick="dump();" />
-        <img id="spinner" src="../../../_utils/image/spinner.gif" style="display: none;" />
+        <div>
+            <strong>Please choose the CSV file to dump:</strong><br />
+            <input type="file" id="file" />
+        </div>
+        <div>
+            <strong>Options</strong><br />
+            <input type="checkbox" id="optionFirstLineHasFieldNames" />
+            <label for="optionFirstLineHasFieldNames">First line has field names</label>
+        </div>
+        <div>
+            <input type="button" value="Load file" onclick="dump();" />
+            <img id="spinner" src="../../../_utils/image/spinner.gif" style="display: none;" />
+        </div>
         <script type="text/javascript">
             var dump = function() {
                 console.log('Dump started.');
@@ -18,11 +32,12 @@
                     reader.readAsText(file);
                     reader.onload = function(event) {
                         console.log('File loaded.');
+                        var optionFirstLineHasFieldNames = document.getElementById('optionFirstLineHasFieldNames').value === 'on' ? 1 : 0;
                         var payload = {
-                          data: event.target.result,
-                          options: {
-                            first_line_has_field_names : true
-                          }
+                            data: event.target.result,
+                            options: {
+                                firstLineHasFieldNames: optionFirstLineHasFieldNames
+                            }
                         };
                         var worker = new Worker('crumbs-worker.js');
                         worker.onmessage = function(message) {

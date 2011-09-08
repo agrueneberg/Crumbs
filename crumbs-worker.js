@@ -7,8 +7,8 @@ onmessage = function(message) {
             return field;
         }
     });
-    if (message.data.options && message.data.options.first_line_has_field_names){
-      fields = rows.shift().split(',');
+    if (message.data.options && message.data.options.firstLineHasFieldNames) {
+        fields = rows.shift().split(',');
     }
     rows.forEach(function(row) {
         var doc = {};
