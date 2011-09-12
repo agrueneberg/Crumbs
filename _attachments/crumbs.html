@@ -36,7 +36,7 @@
                                 firstLineHasFieldNames: optionFirstLineHasFieldNames
                             }
                         };
-                        var worker = new Worker('crumbs-worker.js');
+                        var worker = new Worker('scripts/crumbs-worker.js');
                         worker.onmessage = function(message) {
                             if (message.data === 0) {
                                 alert('Dump complete.');
