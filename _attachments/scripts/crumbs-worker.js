@@ -24,13 +24,13 @@ onmessage = function(message) {
         var body = {'docs' : docs};
         req.onreadystatechange = function() {
             if (req.readyState == 4) {
-                postMessage(1);
+                postMessage(0);
             }
         };
         req.open('POST', url + '_bulk_docs');
         req.setRequestHeader('Content-Type', 'application/json');
         req.send(JSON.stringify(body));
     } else {
-        postMessage(0);
+        postMessage(1);
     }
 };
