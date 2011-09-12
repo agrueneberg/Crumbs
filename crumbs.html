@@ -23,14 +23,12 @@
         </div>
         <script type="text/javascript">
             var dump = function() {
-                console.log('Dump started.');
                 toggleSpinner();
                 var file = document.getElementById('file').files[0];
                 if (file) {
                     var reader = new FileReader();
                     reader.readAsText(file);
                     reader.onload = function(event) {
-                        console.log('File loaded.');
                         var optionFirstLineHasFieldNames = document.getElementById('optionFirstLineHasFieldNames').value === 'on' ? 1 : 0;
                         var payload = {
                             data: event.target.result,
@@ -40,7 +38,11 @@
                         };
                         var worker = new Worker('crumbs-worker.js');
                         worker.onmessage = function(message) {
-                            console.log(message.data);
+                            if (message.data === 0) {
+                                alert('Dump complete.');
+                            } else {
+                                alert('Something went wrong.');
+                            }
                             toggleSpinner();
                         };
                         worker.postMessage(payload);
@@ -48,15 +50,14 @@
                 } else {
                     toggleSpinner();
                     alert('Please provide a CSV file.');
-                    console.log('Dump aborted.');
                 }
             };
             var toggleSpinner = function() {
                 var spinner = document.getElementById('spinner');
                 if (!spinner) {
                     spinner = document.createElement('img');
-                    spinner.src = location.origin + '/_utils/image/spinner.gif';
-                    spinner.id = 'spinner';
+                    spinner.setAttribute('src', location.origin + '/_utils/image/spinner.gif');
+                    spinner.setAttribute('id', 'spinner');
                     spinner.setAttribute('style', 'display: show');
                     document.body.getElementsByTagName('div')[2].appendChild(spinner);
                 } else {
