@@ -16,7 +16,9 @@
         <div>
             <strong>Options</strong><br />
             <input type="checkbox" id="optionFirstLineHasFieldNames" />
-            <label for="optionFirstLineHasFieldNames">First line has field names</label>
+            <label for="optionFirstLineHasFieldNames">First line has field names</label><br />
+            <input type="text" id="optionDelimiter" style="width:10px" value="," />
+            <label for="optionDelimiter">Delimiter (comma will be used if left blank)</label>
         </div>
         <div>
             <input type="button" value="Load file" onclick="dump();" />
@@ -30,10 +32,12 @@
                     reader.readAsText(file);
                     reader.onload = function(event) {
                         var optionFirstLineHasFieldNames = document.getElementById('optionFirstLineHasFieldNames').value === 'on' ? 1 : 0;
+                        var optionDelimiter = document.getElementById('optionDelimiter').value;
                         var payload = {
                             data: event.target.result,
                             options: {
-                                firstLineHasFieldNames: optionFirstLineHasFieldNames
+                                firstLineHasFieldNames: optionFirstLineHasFieldNames,
+                                delimiter: optionDelimiter
                             }
                         };
                         var worker = new Worker('scripts/crumbs-worker.js');
