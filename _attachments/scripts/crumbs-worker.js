@@ -1,6 +1,7 @@
 onmessage = function(message) {
     var docs = [];
     var fields = [];
+    var delimiter = message.data.options.delimiter || ",";
     var rows = message.data.data.split('\n').filter(function(field) {
         // Skip empty rows
         if (field.length > 0) {
@@ -8,11 +9,11 @@ onmessage = function(message) {
         }
     });
     if (message.data.options && message.data.options.firstLineHasFieldNames) {
-        fields = rows.shift().split(',');
+        fields = rows.shift().split(delimiter);
     }
     rows.forEach(function(row) {
         var doc = {};
-        row.split(',').forEach(function(field, index) {
+        row.split(delimiter).forEach(function(field, index) {
             var field_name = fields[index] || 'field' + index;
             doc[field_name] = field;
         });
