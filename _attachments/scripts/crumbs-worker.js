@@ -1,8 +1,8 @@
 onmessage = function(message) {
     var docs = [];
     var fields = [];
-    var delimiter = message.data.options.delimiter || ",";
-    var rows = message.data.data.split('\n').filter(function(field) {
+    var delimiter = message.data.options.delimiter || ',';
+    var rows = message.data.data.split(/\r?\n/).filter(function(field) {
         // Skip empty rows
         if (field.length > 0) {
             return field;
