@@ -8,7 +8,7 @@ onmessage = function(message) {
             return field;
         }
     });
-    if (message.data.options && message.data.options.firstLineHasFieldNames) {
+    if (message.data.options.firstLineHasFieldNames === true) {
         fields = rows.shift().split(delimiter);
     }
     rows.forEach(function(row) {
