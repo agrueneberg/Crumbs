@@ -31,7 +31,7 @@
                     var reader = new FileReader();
                     reader.readAsText(file);
                     reader.onload = function(event) {
-                        var optionFirstLineHasFieldNames = document.getElementById('optionFirstLineHasFieldNames').value === 'on' ? true : false;
+                        var optionFirstLineHasFieldNames = document.getElementById('optionFirstLineHasFieldNames').checked;
                         var optionDelimiter = document.getElementById('optionDelimiter').value;
                         var payload = {
                             data: event.target.result,
