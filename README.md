@@ -21,6 +21,6 @@ Clone this repository and use [CouchApp](http://couchapp.org) to push Crumbs to 
       -X POST\
       -H "Content-Type:application/json"\
       -d "{\"source\":\"http://agrueneberg.iriscouch.com/crumbs\",\
-           \"target\":\"http://localhost:5984/crumbs\",\
+           \"target\":\"http://localhost:5984/<your_db>\",\
            \"filter\":\"vacuum/rw\"}"\
       http://localhost:5984/_replicate
