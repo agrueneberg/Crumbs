@@ -1,0 +1,36 @@
+#spinner {
+    display: none;
+}
+
+.box {
+    height: 90px;
+    padding: 10px;
+}
+
+h3 {
+    margin-top: 0;
+    margin-bottom: 8px;
+}
+
+.border {
+    border: 1px dotted #000;
+}
+
+#dropzone {
+    width: 250px;
+    height: 50px;
+    padding: 5px;
+    border: 2px dashed #C61800;
+}
+
+.float-left {
+    float: left;
+}
+
+.clear {
+    clear: both;
+}
+
+#options {
+    padding-top: 18px;
+}

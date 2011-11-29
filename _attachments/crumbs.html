@@ -1,73 +1,36 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <title>Crumbs</title>
-        <style>
-            div {
-                margin-bottom: 10px;
-            }
-        </style>
+        <link rel="stylesheet" href="stylesheets/crumbs.css" />
     </head>
     <body>
+        <h2>Crumbs</h2>
+        <p>Crumbs converts a CSV file to JSON documents and imports them into CouchDB.</p>
         <div>
-            <strong>Please choose the CSV file to dump:</strong><br />
-            <input type="file" id="file" />
+            <div class="float-left box border">
+                <h3>Choose a CSV file</h3>
+                <input id="picker" type="file" /><br />
+                <input id="button" type="button" value="Load file" />
+            </div>
+            <div class="float-left box">
+                <strong>or</strong>
+            </div>
+            <div class="float-left box border">
+                <h3>Drag-and-Drop a CSV file</h3>
+                <div id="dropzone">Drag the file into this area</div>
+            </div>
         </div>
-        <div>
-            <strong>Options</strong><br />
+        <img id="spinner" src="../../../_utils/image/spinner.gif" />
+        <div id="options" class="clear">
+            <h3>Options</h3>
             <input type="checkbox" id="optionFirstLineHasFieldNames" />
-            <label for="optionFirstLineHasFieldNames">First line has field names</label>
+            <label for="optionFirstLineHasFieldNames">First line has field names</label><br />
+            <input type="text" id="optionDelimiter" style="width: 10px" value="," />
+            <label for="optionDelimiter">Delimiter (comma will be used if left blank)</label>
         </div>
-        <div>
-            <input type="button" value="Load file" onclick="dump();" />
-        </div>
-        <script type="text/javascript">
-            var dump = function() {
-                toggleSpinner();
-                var file = document.getElementById('file').files[0];
-                if (file) {
-                    var reader = new FileReader();
-                    reader.readAsText(file);
-                    reader.onload = function(event) {
-                        var optionFirstLineHasFieldNames = document.getElementById('optionFirstLineHasFieldNames').value === 'on' ? 1 : 0;
-                        var payload = {
-                            data: event.target.result,
-                            options: {
-                                firstLineHasFieldNames: optionFirstLineHasFieldNames
-                            }
-                        };
-                        var worker = new Worker('scripts/crumbs-worker.js');
-                        worker.onmessage = function(message) {
-                            if (message.data === 0) {
-                                alert('Dump complete.');
-                            } else {
-                                alert('Something went wrong.');
-                            }
-                            toggleSpinner();
-                        };
-                        worker.postMessage(payload);
-                    };
-                } else {
-                    toggleSpinner();
-                    alert('Please provide a CSV file.');
-                }
-            };
-            var toggleSpinner = function() {
-                var spinner = document.getElementById('spinner');
-                if (!spinner) {
-                    spinner = document.createElement('img');
-                    spinner.setAttribute('src', location.origin + '/_utils/image/spinner.gif');
-                    spinner.setAttribute('id', 'spinner');
-                    spinner.setAttribute('style', 'display: show');
-                    document.body.getElementsByTagName('div')[2].appendChild(spinner);
-                } else {
-                    if (spinner.getAttribute('style').indexOf('none') == -1) {
-                        spinner.setAttribute('style', 'display: none');
-                    } else {
-                        spinner.setAttribute('style', 'display: show');
-                    }
-                }
-            };
-        </script>
+        <script src="../../../_utils/script/jquery.js"></script>
+        <script src="scripts/crumbs.js"></script>
     </body>
 </html>
