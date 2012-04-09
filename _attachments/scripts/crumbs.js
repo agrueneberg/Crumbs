@@ -1,4 +1,4 @@
-// jQuery creates it's own event object, and it doesn't have a
+// jQuery creates its own event object, and it doesn't have a
 // dataTransfer property yet. This adds dataTransfer to the event object.
 $.event.props.push("dataTransfer");
 $(function() {
