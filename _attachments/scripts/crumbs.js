@@ -2,6 +2,7 @@
 // dataTransfer property yet. This adds dataTransfer to the event object.
 $.event.props.push("dataTransfer");
 $(function() {
+    "use strict";
     var dump;
     dump = function (file) {
         var spinner, worker, reader, optionFirstLineHasFieldNames, optionDelimiter;
@@ -39,6 +40,7 @@ $(function() {
     };
     // Button handlers.
     $("#button").click(function () {
+        var file;
         file = $("#picker").get(0).files[0];
         dump(file);
     });
@@ -52,6 +54,7 @@ $(function() {
         $(this).css("background", "white");
     });
     $("#dropzone").bind("drop", function (e) {
+        var file;
         e.preventDefault();
         $(this).css("background", "white");
         file = e.dataTransfer.files[0];

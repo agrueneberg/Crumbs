@@ -1,4 +1,5 @@
 onmessage = function (message) {
+    "use strict";
     var docs, fields, delimiter, rows, req, url, body;
     docs = [];
     fields = [];
