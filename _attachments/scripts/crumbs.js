@@ -62,6 +62,7 @@ $(function() {
 
  // Handle spinner and option extraction.
     uiHandler = function (fileList) {
+        var options, spinner;
         options = {
             config: {
                 firstLineHasFieldNames: $("#optionFirstLineHasFieldNames").is(":checked"),
@@ -81,8 +82,9 @@ $(function() {
     };
 
  // Button handlers.
-    $("#button").click(function () {
-        var fileList, options, spinner;
+    $("#button").click(function (ev) {
+        var fileList;
+        ev.preventDefault();
         fileList = $("#file-picker").get(0).files;
         uiHandler(fileList);
     });
@@ -90,16 +92,16 @@ $(function() {
  // Drag-and-Drop handlers.
     $("#dropzone").bind("dragover", function (ev) {
         ev.preventDefault();
-        $(this).css("background", "red");
+        $(this).addClass("alert-success");
     });
     $("#dropzone").bind("dragleave", function (ev) {
         ev.preventDefault();
-        $(this).css("background", "white");
+        $(this).removeClass("alert-success");
     });
     $("#dropzone").bind("drop", function (ev) {
-        var fileList, options, spinner;
+        var fileList;
         ev.preventDefault();
-        $(this).css("background", "white");
+        $(this).removeClass("alert-success");
         fileList = ev.dataTransfer.files;
         uiHandler(fileList);
     });

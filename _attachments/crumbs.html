@@ -3,32 +3,49 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <title>Crumbs</title>
+        <link rel="stylesheet" href="stylesheets/bootstrap.css" />
         <link rel="stylesheet" href="stylesheets/crumbs.css" />
     </head>
     <body>
-        <h2>Crumbs</h2>
-        <p>Crumbs converts one or more CSV files to JSON documents and imports them into CouchDB.</p>
-        <div>
-            <div class="float-left box border">
-                <h3>Choose one or more CSV files</h3>
-                <input id="file-picker" type="file" multiple="multiple" /><br />
-                <input id="button" type="button" value="Import files" />
-            </div>
-            <div class="float-left box">
-                <strong>or</strong>
-            </div>
-            <div class="float-left box border">
-                <h3>Drag-and-Drop one or more CSV files</h3>
-                <div id="dropzone">Drag the files into this area</div>
+        <div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="brand" href="#">Crumbs</a>
+                </div>
             </div>
         </div>
-        <img id="spinner" src="../../../_utils/image/spinner.gif" />
-        <div id="options" class="clear">
-            <h3>Options</h3>
-            <input type="checkbox" id="optionFirstLineHasFieldNames" />
-            <label for="optionFirstLineHasFieldNames">First line has field names</label><br />
-            <input type="text" id="optionDelimiter" style="width: 10px" value="," />
-            <label for="optionDelimiter">Delimiter (comma will be used if left blank, use \t for TAB)</label>
+        <div class="container">
+            <h1>Crumbs</h1>
+            <p>Crumbs converts one or more CSV files to JSON documents and imports them into CouchDB.</p>
+            <div class="row">
+                <div class="span5 well upload-option">
+                    <h3>File Picker</h3>
+                    <form>
+                        <input id="file-picker" type="file" multiple="multiple" /><br />
+                        <button id="button" class="btn btn-mini">Import files</button>
+                    </form>
+                </div>
+                <div id="or" class="span1">
+                    <strong>or</strong><br />
+                    <img id="spinner" src="../../../_utils/image/spinner.gif" />
+                </div>
+                <div class="span5 well upload-option">
+                    <h3>Drag-and-Drop</h3>
+                    <div id="dropzone" class="alert alert-block">Drag the files into this area</div>
+                </div>
+            </div>
+            <div>
+                <h2>Options</h2>
+                <form>
+                    <label for="optionDelimiter">Delimiter</label>
+                    <input type="text" id="optionDelimiter" value="," class="span1" />
+                    <span class="help-inline">Comma will be used if left blank, use \t for TAB.</span>
+                    <label for="optionFirstLineHasFieldNames" class="checkbox">
+                        <input type="checkbox" id="optionFirstLineHasFieldNames" />
+                        First line has field names
+                    </label>
+                </form>
+            </div>
         </div>
         <script src="../../../_utils/script/jquery.js"></script>
         <script src="scripts/crumbs.js"></script>
