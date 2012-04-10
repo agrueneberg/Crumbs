@@ -6,6 +6,10 @@ onmessage = function (message) {
     docs = [];
     fields = [];
     delimiter = message.data.options.delimiter || ",";
+ // Escape sequences are escaped on the way. Fix TABs.
+    if (delimiter === "\\t") {
+        delimiter = "\t";
+    }
 
     rows = message.data.data;
     rows = rows.split(/\r?\n/).filter(function (field) {
