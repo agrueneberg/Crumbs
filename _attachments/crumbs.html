@@ -7,19 +7,19 @@
     </head>
     <body>
         <h2>Crumbs</h2>
-        <p>Crumbs converts a CSV file to JSON documents and imports them into CouchDB.</p>
+        <p>Crumbs converts one or more CSV files to JSON documents and imports them into CouchDB.</p>
         <div>
             <div class="float-left box border">
-                <h3>Choose a CSV file</h3>
-                <input id="picker" type="file" /><br />
-                <input id="button" type="button" value="Load file" />
+                <h3>Choose one or more CSV files</h3>
+                <input id="file-picker" type="file" multiple="multiple" /><br />
+                <input id="button" type="button" value="Import files" />
             </div>
             <div class="float-left box">
                 <strong>or</strong>
             </div>
             <div class="float-left box border">
-                <h3>Drag-and-Drop a CSV file</h3>
-                <div id="dropzone">Drag the file into this area</div>
+                <h3>Drag-and-Drop one or more CSV files</h3>
+                <div id="dropzone">Drag the files into this area</div>
             </div>
         </div>
         <img id="spinner" src="../../../_utils/image/spinner.gif" />

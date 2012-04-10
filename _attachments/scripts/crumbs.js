@@ -1,63 +1,107 @@
-// jQuery creates its own event object, and it doesn't have a
-// dataTransfer property yet. This adds dataTransfer to the event object.
-$.event.props.push("dataTransfer");
 $(function() {
     "use strict";
-    var dump;
-    dump = function (file) {
-        var spinner, worker, reader, optionFirstLineHasFieldNames, optionDelimiter;
-        spinner = $("#spinner");
-        spinner.show();
-        if (file) {
-            worker = new Worker("scripts/crumbs-worker.js");
-            optionFirstLineHasFieldNames = $("#optionFirstLineHasFieldNames").is(":checked");
-            optionDelimiter = $("#optionDelimiter").val();
-            reader = new FileReader();
-            reader.onload = function (event) {
-                var payload;
-                payload = {
-                    data: event.target.result,
-                    options: {
-                        firstLineHasFieldNames: optionFirstLineHasFieldNames,
-                        delimiter: optionDelimiter
-                    }
-                };
-                worker.onmessage = function (message) {
-                    if (message.data === 0) {
-                        alert("Import complete.");
-                    } else {
-                        alert("Something went wrong.");
-                    }
-                    spinner.hide();
-                };
-                worker.postMessage(payload);
+
+    var worker, readFile, submitFile, processFileList, uiHandler;
+
+ // jQuery creates its own event object, and it doesn't have a
+ // dataTransfer property yet. This adds dataTransfer to the event object.
+    $.event.props.push("dataTransfer");
+
+ // Initialize worker.
+    worker = new Worker("scripts/crumbs-worker.js");
+
+ // Reads the given file and puts its content into the callback.
+    readFile = function (file, callback) {
+        var reader;
+        reader = new FileReader();
+        reader.onload = function (ev) {
+            callback(null, ev.target.result);
+        };
+        reader.readAsText(file);
+    };
+
+ // Submits a file to the worker.
+    submitFile = function (file, options, callback) {
+        readFile(file, function (err, data) {
+            var payload;
+            payload = {
+                data: data,
+                options: options.config
             };
-            reader.readAsText(file);
+            worker.onmessage = function (message) {
+                if (message.data === 0) {
+                    callback(null);
+                } else {
+                    callback(new Error("Something went wrong."));
+                }
+            };
+            worker.postMessage(payload);
+        });
+    };
+
+ // Iterate through fileList, delegating files to submitFile.
+ // fileList is of type FileList, a DOM type.
+    processFileList = function processFileList(fileList, options, callback) {
+        var file;
+        if (fileList.length === 0 || options.currentFileIdx === fileList.length) {
+         // Don't start if there are no files, and stop if every file has been processed.
+            callback(null);
         } else {
-            spinner.hide();
-            alert("Please provide a CSV file.");
+            options.currentFileIdx = options.currentFileIdx || 0;
+            file = fileList[options.currentFileIdx];
+            submitFile(file, options, function (err) {
+                if (err !== null) {
+                    callback(err);
+                } else {
+                    options.currentFileIdx++;
+                    processFileList(fileList, options, callback);
+                }
+            });
         }
     };
-    // Button handlers.
+
+ // Handle spinner and option extraction.
+    uiHandler = function (fileList) {
+        options = {
+            config: {
+                firstLineHasFieldNames: $("#optionFirstLineHasFieldNames").is(":checked"),
+                delimiter: $("#optionDelimiter").val()
+            }
+        };
+        spinner = $("#spinner");
+        spinner.show();
+        processFileList(fileList, options, function (err) {
+            if (err !== null) {
+                alert(err);
+            } else {
+                alert("Import complete.");
+            }
+            spinner.hide();
+        });
+    };
+
+ // Button handlers.
     $("#button").click(function () {
-        var file;
-        file = $("#picker").get(0).files[0];
-        dump(file);
+        var fileList, options, spinner;
+        fileList = $("#file-picker").get(0).files;
+        uiHandler(fileList);
     });
-    // Drag-and-Drop handlers.
-    $("#dropzone").bind("dragover", function (e) {
-        e.preventDefault();
+
+ // Drag-and-Drop handlers.
+    $("#dropzone").bind("dragover", function (ev) {
+        ev.preventDefault();
         $(this).css("background", "red");
     });
-    $("#dropzone").bind("dragleave", function (e) {
-        e.preventDefault();
+    $("#dropzone").bind("dragleave", function (ev) {
+        ev.preventDefault();
         $(this).css("background", "white");
     });
-    $("#dropzone").bind("drop", function (e) {
-        var file;
-        e.preventDefault();
+    $("#dropzone").bind("drop", function (ev) {
+        var fileList, options, spinner;
+        ev.preventDefault();
         $(this).css("background", "white");
-        file = e.dataTransfer.files[0];
-        dump(file);
+        fileList = ev.dataTransfer.files;
+        uiHandler(fileList);
     });
+
 });
