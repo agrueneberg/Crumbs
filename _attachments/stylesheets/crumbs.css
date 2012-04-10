@@ -25,3 +25,7 @@ body {
     border: 1px dashed #999;
     text-align: center;
 }
+
+#advanced-options {
+    display: none;
+}

@@ -1,7 +1,7 @@
 onmessage = function (message) {
     "use strict";
 
-    var docs, fields, delimiter, rows, req, url, body;
+    var docs, fields, delimiter, doc, rows, req, url, body;
 
     docs = [];
     fields = [];
@@ -9,27 +9,47 @@ onmessage = function (message) {
 
     rows = message.data.data;
     rows = rows.split(/\r?\n/).filter(function (field) {
-        // Skip empty rows.
+     // Skip empty rows.
         if (field.length > 0) {
             return field;
         }
     });
 
-    if (message.data.options.firstLineHasFieldNames === true) {
-        // Populate field names from first row.
+    if (message.data.options.fieldNames === "first-line-has-field-names") {
+     // Populate field names from first row.
         fields = rows.shift().split(delimiter);
     }
 
-    rows.forEach(function (row) {
-        var doc;
+    if (message.data.options.documentCreation === "one-document-per-file") {
         doc = {};
+    }
+
+    rows.forEach(function (row) {
+        var fieldName;
+        if (message.data.options.documentCreation === "one-document-per-row") {
+            doc = {};
+        }
         row.split(delimiter).forEach(function (field, index) {
-            var fieldName;
-            fieldName = fields[index] || "field" + index;
-            doc[fieldName] = field;
+            if (message.data.options.fieldNames === "first-column-has-field-names") {
+                if (index === 0) {
+                 // Populate field name from first column.
+                    fieldName = field;
+                } else {
+                    doc[fieldName] = field;
+                }
+            } else {
+                fieldName = fields[index] || "field" + index;
+                doc[fieldName] = field;
+            }
         });
-        docs.push(doc);
+        if (message.data.options.documentCreation === "one-document-per-row") {
+            docs.push(doc);
+        }
     });
+
+    if (message.data.options.documentCreation === "one-document-per-file") {
+        docs.push(doc);
+    };
 
     if (docs.length === 0) {
      // Could not create documents from file.

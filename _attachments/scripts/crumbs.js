@@ -65,7 +65,8 @@ $(function() {
         var options, spinner;
         options = {
             config: {
-                firstLineHasFieldNames: $("#optionFirstLineHasFieldNames").is(":checked"),
+                fieldNames: $("[name='optionFieldNames']:checked").val() || "none",
+                documentCreation: $("#optionDocumentCreation").val(),
                 delimiter: $("#optionDelimiter").val()
             }
         };
@@ -81,7 +82,7 @@ $(function() {
         });
     };
 
- // Button handlers.
+ // File picker handler.
     $("#button").click(function (ev) {
         var fileList;
         ev.preventDefault();
@@ -104,6 +105,18 @@ $(function() {
         $(this).removeClass("alert-success");
         fileList = ev.dataTransfer.files;
         uiHandler(fileList);
+    });
+
+ // Advanced options handlers.
+    $("#show-advanced-options").click(function (ev) {
+        ev.preventDefault();
+        $("#show-advanced-options").hide();
+        $("#advanced-options").show();
+    });
+    $("#hide-advanced-options").click(function (ev) {
+        ev.preventDefault();
+        $("#show-advanced-options").show();
+        $("#advanced-options").hide();
     });
 
 });
