@@ -15,12 +15,12 @@ After installing Crumbs, point your browser to `http://localhost:5984/<your_db>/
 Installation
 ------------
 
-Clone this repository and use [CouchApp](http://couchapp.org) to push Crumbs to CouchDB, or replicate [an existing deployment of Crumbs](http://agrueneberg.iriscouch.com/crumbs/), e.g. using curl:
+Clone this repository and use [CouchApp](http://couchapp.org) to push Crumbs to CouchDB, or replicate [an existing deployment of Crumbs](http://couchdb.gutpassfilter.de/crumbs/), e.g. using curl:
 
     curl\
       -X POST\
       -H "Content-Type:application/json"\
-      -d "{\"source\":\"http://agrueneberg.iriscouch.com/crumbs\",\
+      -d "{\"source\":\"http://couchdb.gutpassfilter.de/crumbs\",\
            \"target\":\"http://localhost:5984/<your_db>\",\
            \"filter\":\"vacuum/rw\"}"\
       http://localhost:5984/_replicate
