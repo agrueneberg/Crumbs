@@ -17,49 +17,58 @@
         <div class="container">
             <h1>Data Import</h1>
             <p>Crumbs converts one or more CSV files to JSON documents and imports them into CouchDB.</p>
-            <div class="row">
-                <div class="span5 well upload-option">
-                    <h3>File Picker</h3>
-                    <form>
-                        <input id="file-picker" type="file" multiple="multiple" /><br />
-                        <button id="button" class="btn btn-mini">Import files</button>
-                    </form>
-                </div>
-                <div id="or" class="span1">
-                    <strong>or</strong><br />
+            <form class="form-horizontal">
+                <fieldset>
+                    <legend>Options</legend>
+                    <div class="control-group">
+                        <label for="optionDelimiter" class="control-label">Delimiter</label>
+                        <div class="controls">
+                            <input type="text" id="optionDelimiter" value="," class="span1" />
+                            <span class="help-inline">Comma will be used if left blank, use \t for TAB.</span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="controls">
+                            <label for="optionFirstLineHasFieldNames" class="radio">
+                                <input type="radio" id="optionFirstLineHasFieldNames" name="optionFieldNames" value="first-line-has-field-names" />
+                                First line has field names
+                            </label>
+                            <label for="optionFirstColumnHasFieldNames" class="radio advanced-option">
+                                <input type="radio" id="optionFirstColumnHasFieldNames" name="optionFieldNames" value="first-column-has-field-names" />
+                                First column has field names
+                            </label>
+                        </div>
+                    </div>
+                    <div class="control-group advanced-option">
+                        <label for="optionDocumentCreation" class="control-label">Document Creation</label>
+                        <div class="controls">
+                            <select id="optionDocumentCreation">
+                                <option value="one-document-per-row">One document per row</option>
+                                <option value="one-document-per-file">One document per file</option>
+                            </select>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend>File Picker</legend>
+                    <div class="control-group">
+                        <div class="controls">
+                            <div id="dropzone" class="alert alert-block">Drag the files into this area</div>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="filePicker" class="control-label"><strong>or</strong></label>
+                        <div class="controls">
+                            <input id="filePicker" type="file" multiple="multiple" /><br />
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="form-actions">
+                    <input type="submit" class="btn btn-primary" value="Import files" />
+                    <button id="toggle-advanced-options" class="btn">Advanced options</button>
                     <img id="spinner" src="../../../_utils/image/spinner.gif" />
                 </div>
-                <div class="span5 well upload-option">
-                    <h3>Drag-and-Drop</h3>
-                    <div id="dropzone" class="alert alert-block">Drag the files into this area</div>
-                </div>
-            </div>
-            <div>
-                <h2>Options</h2>
-                <form>
-                    <label for="optionDelimiter">Delimiter</label>
-                    <input type="text" id="optionDelimiter" value="," class="span1" />
-                    <span class="help-inline">Comma will be used if left blank, use \t for TAB.</span>
-                    <label for="optionFirstLineHasFieldNames" class="radio">
-                        <input type="radio" id="optionFirstLineHasFieldNames" name="optionFieldNames" value="first-line-has-field-names" />
-                        First line has field names
-                    </label>
-                    <div id="advanced-options">
-                        <h3>Advanced Options</h3>
-                        <label for="optionDocumentCreation">Document creation</label>
-                        <select id="optionDocumentCreation">
-                            <option value="one-document-per-row">One document per row</option>
-                            <option value="one-document-per-file">One document per file</option>
-                        </select>
-                        <label for="optionFirstColumnHasFieldNames" class="radio">
-                            <input type="radio" id="optionFirstColumnHasFieldNames" name="optionFieldNames" value="first-column-has-field-names" />
-                            First column has field names
-                        </label>
-                        <a id="hide-advanced-options" href="#">Hide advanced options</a>
-                    </div>
-                </form>
-                <a id="show-advanced-options" href="#">Show advanced options</a>
-            </div>
+            </form>
         </div>
         <script src="../../../_utils/script/jquery.js"></script>
         <script src="scripts/crumbs.js"></script>

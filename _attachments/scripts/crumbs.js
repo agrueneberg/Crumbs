@@ -83,10 +83,10 @@ $(function() {
     };
 
  // File picker handler.
-    $("#button").click(function (ev) {
+    $("form").submit(function (ev) {
         var fileList;
         ev.preventDefault();
-        fileList = $("#file-picker").get(0).files;
+        fileList = $("#filePicker").get(0).files;
         uiHandler(fileList);
     });
 
@@ -107,16 +107,10 @@ $(function() {
         uiHandler(fileList);
     });
 
- // Advanced options handlers.
-    $("#show-advanced-options").click(function (ev) {
+ // Advanced options handler.
+    $("#toggle-advanced-options").click(function (ev) {
         ev.preventDefault();
-        $("#show-advanced-options").hide();
-        $("#advanced-options").show();
-    });
-    $("#hide-advanced-options").click(function (ev) {
-        ev.preventDefault();
-        $("#show-advanced-options").show();
-        $("#advanced-options").hide();
+        $(".advanced-option").toggle();
     });
 
 });

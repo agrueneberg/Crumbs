@@ -2,30 +2,18 @@ body {
     padding-top: 60px;
 }
 
-.upload-option {
-    height: 105px;
-}
-
-#or {
-    margin-top: 21px;
-    font-size: 25px;
-    font-variant: small-caps;
-    text-align: center;
-}
-
 #spinner {
     display: none;
-    margin-top: 35px;
+    margin-left: 5px;
 }
 
 #dropzone {
-    margin-top: 5px;
     padding-top: 25px;
     height: 30px;
     border: 1px dashed #999;
     text-align: center;
 }
 
-#advanced-options {
+.advanced-option {
     display: none;
 }
