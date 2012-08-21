@@ -9,7 +9,7 @@ Crumbs is different from other import solutions in that it is served as an attac
 Example
 -------
 
-After installing Crumbs, point your browser to `http://localhost:5984/<your_db>/_design/crumbs/crumbs.html`, select one or more CSV files and click `Import files`, or drag them into the designated area.
+After installing Crumbs, point your browser to `http://localhost:5984/<your_db>/_design/crumbs/import.html`, select one or more CSV files and click `Import files`, or drag them into the designated area.
 
 
 Installation
