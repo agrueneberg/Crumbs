@@ -60,9 +60,9 @@ $(function() {
         }
     };
 
- // Handle spinner and option extraction.
+ // Handle option extraction and status indicator.
     uiHandler = function (fileList) {
-        var options, spinner;
+        var options, button;
         options = {
             config: {
                 fieldNames: $("[name='optionFieldNames']:checked").val() || "none",
@@ -70,15 +70,15 @@ $(function() {
                 delimiter: $("#optionDelimiter").val()
             }
         };
-        spinner = $("#spinner");
-        spinner.show();
+        button = $("input[type='submit']");
+        button.button("loading");
         processFileList(fileList, options, function (err) {
             if (err !== null) {
                 alert(err);
             } else {
                 alert("Import complete.");
             }
-            spinner.hide();
+            button.button("reset");
         });
     };
 
