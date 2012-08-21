@@ -7,34 +7,32 @@
         <link rel="stylesheet" href="stylesheets/crumbs.css" />
     </head>
     <body>
-        <div class="navbar navbar-fixed-top">
-            <div class="navbar-inner">
-                <div class="container">
+        <div class="container">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
                     <a class="brand" href="#">Crumbs</a>
                 </div>
             </div>
-        </div>
-        <div class="container">
             <h1>Data Import</h1>
-            <p>Crumbs converts one or more CSV files to JSON documents and imports them into CouchDB.</p>
+            <p class="lead">Crumbs converts one or more CSV files to JSON documents and imports them into CouchDB.</p>
             <form class="form-horizontal">
                 <fieldset>
                     <legend>Options</legend>
                     <div class="control-group">
                         <label for="optionDelimiter" class="control-label">Delimiter</label>
                         <div class="controls">
-                            <input type="text" id="optionDelimiter" value="," class="span1" />
+                            <input id="optionDelimiter" type="text" value="," class="span1" />
                             <span class="help-inline">Comma will be used if left blank, use <code>\t</code> for TAB.</span>
                         </div>
                     </div>
                     <div class="control-group">
                         <div class="controls">
                             <label for="optionFirstLineHasFieldNames" class="radio">
-                                <input type="radio" id="optionFirstLineHasFieldNames" name="optionFieldNames" value="first-line-has-field-names" />
+                                <input id="optionFirstLineHasFieldNames" name="optionFieldNames" type="radio" value="first-line-has-field-names" />
                                 First line has field names
                             </label>
                             <label for="optionFirstColumnHasFieldNames" class="radio advanced-option">
-                                <input type="radio" id="optionFirstColumnHasFieldNames" name="optionFieldNames" value="first-column-has-field-names" />
+                                <input id="optionFirstColumnHasFieldNames" name="optionFieldNames" type="radio" value="first-column-has-field-names" />
                                 First column has field names
                             </label>
                         </div>

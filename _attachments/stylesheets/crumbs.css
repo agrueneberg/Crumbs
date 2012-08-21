@@ -1,19 +1,13 @@
-body {
-    padding-top: 60px;
-}
-
 #spinner {
     display: none;
     margin-left: 5px;
 }
-
 #dropzone {
     padding-top: 25px;
     height: 30px;
     border: 1px dashed #999;
     text-align: center;
 }
-
 .advanced-option {
     display: none;
 }
