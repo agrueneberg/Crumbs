@@ -1,0 +1,10 @@
+{
+    "name": "crumbs",
+    "version": "0.1.0",
+    "description": "Imports CSV files to CouchDB.",
+    "url": "https://github.com/agrueneberg/Crumbs",
+    "attachments": ["stylesheets", "scripts", "import.html"],
+    "dependencies": {
+        "attachments": null
+    }
+}
