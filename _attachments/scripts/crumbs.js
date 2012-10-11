@@ -1,7 +1,7 @@
 $(function() {
     "use strict";
 
-    var worker, readFile, submitFile, processFileList, uiHandler;
+    var worker, fileList, readFile, submitFile, processFileList;
 
  // jQuery creates its own event object, and it doesn't have a
  // dataTransfer property yet. This adds dataTransfer to the event object.
@@ -9,6 +9,9 @@ $(function() {
 
  // Initialize worker.
     worker = new Worker("scripts/crumbs-worker.js");
+
+ // Keep file list.
+    fileList = [];
 
  // Reads the given file and puts its content into the callback.
     readFile = function (file, callback) {
@@ -60,9 +63,10 @@ $(function() {
         }
     };
 
- // Handle option extraction and status indicator.
-    uiHandler = function (fileList) {
+ // Handle option extraction and status indicator on submit.
+    $("form").submit(function (ev) {
         var options, button;
+        ev.preventDefault();
         options = {
             config: {
                 fieldNames: $("[name='optionFieldNames']:checked").val() || "none",
@@ -80,14 +84,11 @@ $(function() {
             }
             button.button("reset");
         });
-    };
+    });
 
  // File picker handler.
-    $("form").submit(function (ev) {
-        var fileList;
-        ev.preventDefault();
-        fileList = $("#filePicker").get(0).files;
-        uiHandler(fileList);
+    $("#filePicker").change(function (ev) {
+        fileList = ev.target.files;
     });
 
  // Drag-and-Drop handlers.
@@ -100,11 +101,14 @@ $(function() {
         $(this).removeClass("alert-success");
     });
     $("#dropzone").bind("drop", function (ev) {
-        var fileList;
         ev.preventDefault();
         $(this).removeClass("alert-success");
         fileList = ev.dataTransfer.files;
-        uiHandler(fileList);
+        if (fileList.length === 1) {
+            $(this).text(fileList[0].name);
+        } else {
+            $(this).text(fileList.length + " files");
+        }
     });
 
  // Advanced options handler.
