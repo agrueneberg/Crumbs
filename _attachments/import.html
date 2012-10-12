@@ -25,6 +25,7 @@
                         </div>
                     </div>
                     <div class="control-group">
+                        <label class="control-label">Field Names</label>
                         <div class="controls">
                             <label for="optionFirstLineHasFieldNames" class="radio">
                                 <input id="optionFirstLineHasFieldNames" name="optionFieldNames" type="radio" value="first-line-has-field-names" />
@@ -34,6 +35,11 @@
                                 <input id="optionFirstColumnHasFieldNames" name="optionFieldNames" type="radio" value="first-column-has-field-names" />
                                 First column has field names
                             </label>
+                            <select id="optionFieldNameNormalization">
+                                <option value="do-not-modify">Do not modify field names</option>
+                                <option value="use-camelcase">Convert field names to CamelCase</option>
+                                <option value="use-underscore">Convert field names to _score</option>
+                            </select>
                         </div>
                     </div>
                     <div class="control-group advanced-option">

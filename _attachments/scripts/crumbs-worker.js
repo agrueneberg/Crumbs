@@ -1,7 +1,8 @@
 onmessage = function (message) {
     "use strict";
 
-    var docs, fields, delimiter, doc, rows, req, url, body;
+    var docs, fields, delimiter, fieldNameNormalization, toCamelCase,
+        toUnderscore, doc, rows, req, url, body;
 
     docs = [];
     fields = [];
@@ -10,6 +11,17 @@ onmessage = function (message) {
     if (delimiter === "\\t") {
         delimiter = "\t";
     }
+    fieldNameNormalization = message.data.options.fieldNameNormalization;
+
+    toCamelCase = function (s) {
+        return s.replace(new RegExp("[^ \\w]", "g"), "").replace(new RegExp(" +(\\w)?", "g"), function (m, g) {
+            return g.toUpperCase();
+        });
+    };
+
+    toUnderscore = function (s) {
+        return s.replace(new RegExp("[^ \\w]", "g"), "").toLowerCase().replace(new RegExp(" ", "g"), "_");
+    };
 
     rows = message.data.data;
     rows = rows.split(/\r?\n/).filter(function (field) {
@@ -22,6 +34,14 @@ onmessage = function (message) {
     if (message.data.options.fieldNames === "first-line-has-field-names") {
      // Populate field names from first row.
         fields = rows.shift().split(delimiter);
+        fields = fields.map(function (field) {
+            if (fieldNameNormalization === "use-camelcase") {
+                field = toCamelCase(field);
+            } else if (fieldNameNormalization === "use-underscore") {
+                field = toUnderscore(field);
+            }
+            return field;
+        });
     }
 
     if (message.data.options.documentCreation === "one-document-per-file") {
@@ -37,6 +57,11 @@ onmessage = function (message) {
             if (message.data.options.fieldNames === "first-column-has-field-names") {
                 if (index === 0) {
                  // Populate field name from first column.
+                    if (fieldNameNormalization === "use-camelcase") {
+                        field = toCamelCase(field);
+                    } else if (fieldNameNormalization === "use-underscore") {
+                        field = toUnderscore(field);
+                    }
                     fieldName = field;
                 } else {
                     doc[fieldName] = field;
@@ -53,7 +78,7 @@ onmessage = function (message) {
 
     if (message.data.options.documentCreation === "one-document-per-file") {
         docs.push(doc);
-    };
+    }
 
     if (docs.length === 0) {
      // Could not create documents from file.
