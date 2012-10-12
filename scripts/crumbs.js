@@ -70,6 +70,7 @@ $(function() {
         options = {
             config: {
                 fieldNames: $("[name='optionFieldNames']:checked").val() || "none",
+                fieldNameNormalization: $("#optionFieldNameNormalization :selected").val() || "do-not-modify",
                 documentCreation: $("#optionDocumentCreation").val(),
                 delimiter: $("#optionDelimiter").val()
             }
