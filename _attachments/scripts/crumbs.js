@@ -1,7 +1,7 @@
 $(function() {
     "use strict";
 
-    var worker, fileList, readFile, submitFile, processFileList;
+    var worker, fileList, submitFile, processFileList;
 
  // jQuery creates its own event object, and it doesn't have a
  // dataTransfer property yet. This adds dataTransfer to the event object.
@@ -13,33 +13,21 @@ $(function() {
  // Keep file list.
     fileList = [];
 
- // Reads the given file and puts its content into the callback.
-    readFile = function (file, callback) {
-        var reader;
-        reader = new FileReader();
-        reader.onload = function (ev) {
-            callback(null, ev.target.result);
-        };
-        reader.readAsText(file);
-    };
-
  // Submits a file to the worker.
     submitFile = function (file, options, callback) {
-        readFile(file, function (err, data) {
-            var payload;
-            payload = {
-                data: data,
-                options: options.config
-            };
-            worker.onmessage = function (message) {
-                if (message.data === 0) {
-                    callback(null);
-                } else {
-                    callback(new Error("Something went wrong."));
-                }
-            };
-            worker.postMessage(payload);
-        });
+        var payload;
+        payload = {
+            file: file,
+            options: options.config
+        };
+        worker.onmessage = function (message) {
+            if (message.data === 0) {
+                callback(null);
+            } else {
+                callback(new Error("Something went wrong."));
+            }
+        };
+        worker.postMessage(payload);
     };
 
  // Iterate through fileList, delegating files to submitFile.
@@ -50,6 +38,7 @@ $(function() {
          // Don't start if there are no files, and stop if every file has been processed.
             callback(null);
         } else {
+         // Keep pointer to current file.
             options.currentFileIdx = options.currentFileIdx || 0;
             file = fileList[options.currentFileIdx];
             submitFile(file, options, function (err) {
@@ -67,6 +56,7 @@ $(function() {
     $("form").submit(function (ev) {
         var options, button;
         ev.preventDefault();
+     // Collect options.
         options = {
             config: {
                 fieldNames: $("[name='optionFieldNames']:checked").val() || "none",
