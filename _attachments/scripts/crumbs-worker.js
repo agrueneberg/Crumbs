@@ -1,10 +1,26 @@
 importScripts("async.js", "read-lines.js");
 
+var persistDocuments;
+
+persistDocuments = function (docs, callback) {
+    req = new XMLHttpRequest();
+    url = location.protocol + "//" + location.host + "/" + location.pathname.split("/")[1] + "/";
+    body = {
+        "docs" : docs
+    };
+    req.onload = function () {
+        callback();
+    };
+    req.open("POST", url + "_bulk_docs");
+    req.setRequestHeader("Content-Type", "application/json");
+    req.send(JSON.stringify(body));
+};
+
 onmessage = function (message) {
     "use strict";
 
     var file, options, docs, fields, delimiter, fieldNameNormalization,
-        toCamelCase, toUnderscore, doc, req, url, body;
+        documentThreshold, toCamelCase, toUnderscore, doc, req, url, body;
 
     file = message.data.file;
     options = message.data.options;
@@ -19,6 +35,9 @@ onmessage = function (message) {
     }
 
     fieldNameNormalization = options.fieldNameNormalization;
+
+    // TODO: Make documentThreshold configurable.
+    documentThreshold = 250;
 
     toCamelCase = function (s) {
         return s.replace(new RegExp("[^ \\w]", "g"), "").replace(new RegExp(" +(\\w)?", "g"), function (m, g) {
@@ -87,7 +106,15 @@ onmessage = function (message) {
 
         }
 
-        callback();
+        // Persist some documents after threshold is reached.
+        if (docs.length === documentThreshold) {
+            persistDocuments(docs, function () {
+                docs = [];
+                callback();
+            });
+        } else {
+            callback();
+        }
 
     }, function (err) {
 
@@ -99,23 +126,13 @@ onmessage = function (message) {
                 docs.push(doc);
             }
 
-            if (docs.length === 0) {
-             // Could not create documents from file.
-             // Exit code: 1 = Failure.
-                postMessage(1);
-            } else {
-                req = new XMLHttpRequest();
-                url = location.protocol + "//" + location.host + "/" + location.pathname.split("/")[1] + "/";
-                body = {
-                    "docs" : docs
-                };
-                req.onload = function () {
-                 // Exit code: 0 = Success.
+            // Persist the rest of the documents.
+            if (docs.length > 0) {
+                persistDocuments(docs, function () {
                     postMessage(0);
-                };
-                req.open("POST", url + "_bulk_docs");
-                req.setRequestHeader("Content-Type", "application/json");
-                req.send(JSON.stringify(body));
+                });
+            } else {
+                postMessage(0);
             }
 
         }
