@@ -17,14 +17,14 @@ readLines = function (file, fn, callback) {
     if (sliceMethod && (file.size - 1) > chunkSize) {
         // Initialize hold space for temporary storage across iterations.
         hold = "";
-        // Set initial line number.
+        // Set initial number of lines.
         numLines = 0;
         // Set initial boundaries.
         lowerBoundary = 0;
         upperBoundary = chunkSize;
         lastIteration = false;
         // Perform asynchronous loop.
-        async.doUntil(function (callback) {
+        async.doUntil(function (onIterationDone) {
             var reader, chunk;
             // Mark the last iteration.
             if (upperBoundary === file.size - 1) {
@@ -38,7 +38,7 @@ readLines = function (file, fn, callback) {
                     text = hold + evt.target.result;
                     // Split text on newline characters.
                     splits = text.split(/\r?\n/);
-                    splits.forEach(function (split, index) {
+                    async.times(splits.length, function (index, onFnDone) {
                         if (index === splits.length - 1) {
                             // The last split does not necessarily end with a
                             // newline character because it might have been
@@ -47,43 +47,44 @@ readLines = function (file, fn, callback) {
                                 numLines = numLines + 1;
                                 // Output the split anyway if the end of the
                                 // buffer is reached.
-                                fn(splits[splits.length - 1], numLines);
+                                fn(splits[index], numLines, onFnDone);
                             } else {
                                 // If there are more iterations, save the split
                                 // for the next one.
-                                hold = splits[splits.length - 1];
+                                hold = splits[index];
+                                onFnDone();
                             }
                         } else {
                             numLines = numLines + 1;
                             // Output each line.
-                            fn(splits[index], numLines);
+                            fn(splits[index], numLines, onFnDone);
                         }
+                    }, function (err) {
+                        // Set new boundaries.
+                        lowerBoundary = upperBoundary;
+                        upperBoundary = lowerBoundary + chunkSize;
+                        // Prevent overshooting.
+                        if (upperBoundary > file.size - 1) {
+                            upperBoundary = file.size - 1;
+                        }
+                        onIterationDone();
                     });
-                    // Set new boundaries.
-                    lowerBoundary = upperBoundary;
-                    upperBoundary = lowerBoundary + chunkSize;
-                    // Prevent overshooting.
-                    if (upperBoundary > file.size - 1) {
-                        upperBoundary = file.size - 1;
-                    }
-                    callback();
                 }
             };
             chunk = file[sliceMethod](lowerBoundary, upperBoundary);
             reader.readAsBinaryString(chunk);
         }, function () {
             return lastIteration === true;
-        }, function (err) {
-            callback(err);
-        });
+        }, callback);
     } else {
         reader = new FileReader();
         reader.onloadend = function (evt) {
+            var splits;
             if (evt.target.readyState == FileReader.DONE) {
-                evt.target.result.split("\n").forEach(function (line, i) {
-                    fn(line, i);
-                });
-                callback(null);
+                splits = evt.target.result.split(/\r?\n/);
+                async.times(splits.length, function (index, onFnDone) {
+                    fn(splits[index], index + 1, onFnDone);
+                }, callback);
             }
         };
         reader.readAsBinaryString(file);

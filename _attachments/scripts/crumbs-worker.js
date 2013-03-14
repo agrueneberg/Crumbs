@@ -34,58 +34,60 @@ onmessage = function (message) {
         doc = {};
     }
 
-    readLines(file, function (line, i) {
+    readLines(file, function (line, lineNumber, callback) {
 
         var fieldName;
 
         // Filter empty lines.
-        if (line.length === 0) {
-            return;
-        }
+        if (line.length > 0) {
 
-        if (i === 1 && options.fieldNames === "first-line-has-field-names") {
+            if (lineNumber === 1 && options.fieldNames === "first-line-has-field-names") {
 
-         // Populate field names from first row.
-            fields = line.split(delimiter);
-            fields = fields.map(function (field) {
-                if (fieldNameNormalization === "use-camelcase") {
-                    field = toCamelCase(field);
-                } else if (fieldNameNormalization === "use-underscore") {
-                    field = toUnderscore(field);
+             // Populate field names from first row.
+                fields = line.split(delimiter);
+                fields = fields.map(function (field) {
+                    if (fieldNameNormalization === "use-camelcase") {
+                        field = toCamelCase(field);
+                    } else if (fieldNameNormalization === "use-underscore") {
+                        field = toUnderscore(field);
+                    }
+                    return field;
+                });
+
+            } else {
+
+                if (options.documentCreation === "one-document-per-row") {
+                    doc = {};
                 }
-                return field;
-            });
 
-        } else {
-
-            if (options.documentCreation === "one-document-per-row") {
-                doc = {};
-            }
-
-            line.split(delimiter).forEach(function (field, index) {
-                if (options.fieldNames === "first-column-has-field-names") {
-                    if (index === 0) {
-                     // Populate field name from first column.
-                        if (fieldNameNormalization === "use-camelcase") {
-                            field = toCamelCase(field);
-                        } else if (fieldNameNormalization === "use-underscore") {
-                            field = toUnderscore(field);
+                line.split(delimiter).forEach(function (field, index) {
+                    if (options.fieldNames === "first-column-has-field-names") {
+                        if (index === 0) {
+                         // Populate field name from first column.
+                            if (fieldNameNormalization === "use-camelcase") {
+                                field = toCamelCase(field);
+                            } else if (fieldNameNormalization === "use-underscore") {
+                                field = toUnderscore(field);
+                            }
+                            fieldName = field;
+                        } else {
+                            doc[fieldName] = field;
                         }
-                        fieldName = field;
                     } else {
+                        fieldName = fields[index] || "field" + index;
                         doc[fieldName] = field;
                     }
-                } else {
-                    fieldName = fields[index] || "field" + index;
-                    doc[fieldName] = field;
-                }
-            });
+                });
 
-            if (options.documentCreation === "one-document-per-row") {
-                docs.push(doc);
+                if (options.documentCreation === "one-document-per-row") {
+                    docs.push(doc);
+                }
+
             }
 
         }
+
+        callback();
 
     }, function (err) {
 
