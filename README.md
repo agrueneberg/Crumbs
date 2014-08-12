@@ -16,13 +16,13 @@ Clone this repository and use [CouchApp](http://couchapp.org) to push Crumbs to 
 
 Alternatively, replicate [an existing deployment of Crumbs](https://couchdb.gutpassfilter.de/crumbs/) to `<your_host>/<your_db>` using `curl`:
 
-curl\
-  -X POST\
-  -H "Content-Type:application/json"\
-  -d "{\"source\":\"https://couchdb.gutpassfilter.de/crumbs\",\
-       \"target\":\"http://<your_host>/<your_db>\",\
-       \"filter\":\"vacuum/rw\"}"\
-  http://localhost:5984/_replicate
+    curl\
+      -X POST\
+      -H "Content-Type:application/json"\
+      -d "{\"source\":\"https://couchdb.gutpassfilter.de/crumbs\",\
+           \"target\":\"http://<your_host>/<your_db>\",\
+           \"filter\":\"vacuum/rw\"}"\
+      http://localhost:5984/_replicate
 
 
 Import
