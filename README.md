@@ -9,7 +9,20 @@ Crumbs is different from other import solutions in that it is served as an attac
 Installation
 ------------
 
-Clone this repository and use [CouchApp](http://couchapp.org) or similar tools to push Crumbs to CouchDB, or replicate an existing deployment of Crumbs.
+Clone this repository and use [CouchApp](http://couchapp.org) to push Crumbs to `<your_host>/<your_db>`:
+
+    git clone https://github.com/agrueneberg/Crumbs.git
+    couchapp push Crumbs/ http://<your_host>/<your_db>
+
+Alternatively, replicate [an existing deployment of Crumbs](https://couchdb.gutpassfilter.de/crumbs/) to `<your_host>/<your_db>` using `curl`:
+
+curl\
+  -X POST\
+  -H "Content-Type:application/json"\
+  -d "{\"source\":\"https://couchdb.gutpassfilter.de/crumbs\",\
+       \"target\":\"http://<your_host>/<your_db>\",\
+       \"filter\":\"vacuum/rw\"}"\
+  http://localhost:5984/_replicate
 
 
 Import
