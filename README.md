@@ -1,6 +1,8 @@
 Crumbs
 ======
 
+[![Project Status: Inactive - The project has reached a stable, usable state but is no longer being actively developed; support/maintenance will be provided as time allows.](http://www.repostatus.org/badges/0.1.0/inactive.svg)](http://www.repostatus.org/#inactive)
+
 Crumbs is a CSV importer for [CouchDB](http://www.couchdb.org).
 
 Crumbs is different from other import solutions in that it is served as an attachment to a CouchDB design document. The [File API](http://www.w3.org/TR/FileAPI/) of HTML5 allows the browser to read one or more input files directly from the local machine without any uploads and additional server-side logic. Crumbs is even able to process large files without affecting the user experience; its implementation as a [Web Worker](http://www.w3.org/TR/workers/) pushes the workload in the background.
